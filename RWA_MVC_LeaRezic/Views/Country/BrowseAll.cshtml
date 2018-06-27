@@ -1,0 +1,232 @@
+﻿@model RWA_MVC_LeaRezic.Models.ViewModels.CountriesAndCitiesVM
+
+@{
+    ViewBag.Title = "BrowseAll";
+
+    var ddlOptions = Model.Countries;
+}
+
+<h2 class="text-muted">Browse all Countries and Cities</h2>
+
+<div style="margin-top:50px">
+    <div class="row">
+        @* --- DRŽAVE --- *@
+        <div class="col-md-4">
+            <div style="padding:20px;">
+                @* ODABIR DRŽAVE *@
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Choose a country</h3>
+                    </div>
+                    <div class="panel-body">
+                        @* ddl države*@
+                        @Html.DropDownList("IDCountry", selectList: new SelectList(items: ddlOptions, dataTextField: "Naziv", dataValueField: "IDDrzava"), htmlAttributes: new { @class = "form-control" })
+                    </div>
+                </div>
+                @* DODAVANJE DRŽAVE *@
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Add a new country</h3>
+                    </div>
+                    <div class="panel-body">
+                        @using (Html.BeginForm(actionName: "AddCountry", controllerName: "Country", method: FormMethod.Post, htmlAttributes: new { id = "countryForm" }))
+                        {
+                            <div class="row">
+                                <div class="col-xs-8">
+                                    @Html.EditorFor(model => model.CreatedCountry.Name,
+                                                    new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.CreatedCountry.Name, "",
+                                                    new { @class = "text-danger" })
+                                </div>
+                                <div class="col-xs-4">
+                                    <input type="submit" value="Add" class="btn btn-success" id="btnAddCountry" />
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                @* dodatan info za korisnika *@
+                <div class="well">
+                    <span class="text-success" style="font-weight:bold;font-size:1.7rem;">
+                        Click on a city to view customers
+                    </span>
+                </div>
+                @*gotov dodatan info*@
+
+                @* DODAVANJE GRADA *@
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title" id="addCityTitle">Add a new city city to - "Country Name"</h3>
+                    </div>
+                    <div class="panel-body">
+                        @using (Html.BeginForm(actionName: "AddCity", controllerName: "Country", method: FormMethod.Post, htmlAttributes: new { id = "cityForm" }))
+                        {
+                            <div class="row">
+                                <div class="col-xs-8">
+                                    @Html.HiddenFor(model => model.CreatedCountry.IDCountry)
+                                    @Html.EditorFor(model => model.CreatedCity.Name,
+                                                    new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.CreatedCity.Name, "",
+                                                    new { @class = "text-danger" })
+                                </div>
+                                <div class="col-xs-4">
+                                    <input type="submit" value="Add" class="btn btn-success" id="btnAddCity" />
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                @*gotovo dodavanje grada*@
+
+            </div>
+        </div>
+
+        @* --- GRADOVI ---- *@
+        <div class="col-md-8">
+            <div style="padding:20px;">
+                @* LISTA GRADOVA odabrane države *@
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <h3 class="panel-title" id="citiesListTitle">Cities in - "CountryName"</h3>
+                    </div>
+                    <div class="panel-body">
+                        @* sama lista koju šopa ajax *@
+                        <div class="list-group" id="citiesList">
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        @*gotov dio s gradovima*@
+    </div>
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+
+        fillCitiesList();
+
+        $('#IDCountry').on("change", function (e) {
+            e.preventDefault();
+            //console.log("patka");
+            fillCitiesList();
+        })
+
+        function fillCitiesList() {
+            $('#citiesList').empty();
+            var idCountry = $('#IDCountry').val();
+            var countryName = $('#IDCountry').find('option:selected').text();
+            // ažurira nazive za listu i dodavanje grada
+            $('#citiesListTitle').text(`Cities in - ${countryName}`);
+            $('#addCityTitle').text(`Add a new city to ${countryName}`);
+            // dohvaćanje liste gradova za odabranu državu
+            $.ajax({
+                url: '@Url.Action(controllerName: "Country", actionName: "GetCitiesForCountry")',
+                data: { id: idCountry },
+                success: function (data) {
+                    // ak je prazno kaže da nema još gradova
+                    if (jQuery.isEmptyObject(data)) {
+                        var message = `<p style='font-size:1.5rem'> . . . no cities yet . . .</p>`;
+                        $('#citiesList').append(message);
+                    }
+                    // u suprotnom ih ispiše u listu
+                    else {
+                        $(data).each(function (index, city) {
+                        // proučit još, asinkroni ajax + lazy loading entity = kaos, i kak ljepše id u url stavit
+                        var href = '@Url.Action(controllerName: "Customer", actionName: "ViewAll")';
+                        href += `?id=${city.IDGrad}`;
+                        var cityLink = `<a href=${href} class='list-group-item'>${city.Naziv}</a >`;
+                        $('#citiesList').append(cityLink);
+                    })
+                    }
+                }
+                // tu možda treba dodat nešto za error
+            })
+        }
+
+        // za slanje formi
+        $('#countryForm').on('submit', function (e) {
+            e.preventDefault();
+            if ($(this).valid()) {
+                console.log("Okej je model");
+                var submitData = {
+                    IDCountry: 0,
+                    Name: $('#CreatedCountry_Name').val()
+                }
+                //console.log(submitData.Name);
+                $.ajax({
+                    url: '@Url.Action(controllerName:"Country",actionName:"AddCountry")',
+                    data: submitData,
+                    statusCode: {
+                        200: function () {
+                            toastr.success(`${submitData.Name} - successfully added!`);
+                            $('#CreatedCountry_Name').val("");
+                            $('#IDCity').focus();
+                            refreshDdl();
+                        },
+                        304: function () {
+                            toastr.warning(`Oops! Couldn't add country.<br/>Maybe ${submitData.Name} already exists?`);
+                            //$('#CreatedCountry_Name').val("");
+                            //$('#IDCity').focus();
+                        }
+                    }
+                })
+                //$('#CreatedCountry_Name').val("").focusout();
+            }
+            else {
+                console.log("Ne valja neš");
+            }
+        })
+
+        function refreshDdl() {
+            $('#IDCountry').text("");
+            $.ajax({
+                url: '@Url.Action(actionName:"GetAllCountries",controllerName:"Country")',
+                success: function (data) {
+                    $(data).each(function (index, country) {
+                        var text = country.Naziv;
+                        var value = country.IDDrzava;
+                        var option = new Option(text, value);
+                        $("#IDCountry").append(option);
+                    })
+                }
+            })
+        }
+
+        // kad šalje CITY formu
+        $('#cityForm').on('submit', function (e) {
+            e.preventDefault();
+            if ($(this).valid()) {
+                var submitData = {
+                    IDCity: 0,
+                    Name: $('#CreatedCity_Name').val(),
+                    CountryID: $('#IDCountry').val()
+                }
+                $.ajax({
+                    url: '@Url.Action(controllerName:"Country",actionName:"AddCity")',
+                    data: submitData,
+                    statusCode: {
+                        200: function () {
+                            toastr.success(`${submitData.Name} - successfully added!`);
+                            $('#CreatedCity_Name').val("");
+                            $('#IDCity').focus();
+                            fillCitiesList();
+                        },
+                        304: function () {
+                            toastr.warning(`Oops! Couldn't add city.<br/>Maybe ${submitData.Name} already exists?`);
+                        }
+                    }
+                })
+            }
+            else {
+                console.log("Ne valja neš");
+            }
+        })
+
+    </script>
+
+}
