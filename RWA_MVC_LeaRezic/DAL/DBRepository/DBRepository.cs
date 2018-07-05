@@ -62,7 +62,10 @@ namespace RWA_MVC_LeaRezic.DAL.DBRepository
             {
                 using (var _dbContext = new DBContext())
                 {
-                    return _dbContext.Racun.Include("Kupac").ToList();
+                    return _dbContext.Racun.Include("Komercijalist")
+                                            .Include("KreditnaKartica")
+                                            .Include(r => r.Stavka)
+                                            .ToList();
                 }
             }
             catch (Exception)

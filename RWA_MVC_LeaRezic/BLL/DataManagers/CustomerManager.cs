@@ -8,9 +8,8 @@ using System.Linq;
 
 namespace RWA_MVC_LeaRezic.BLL.DataManagers
 {
-    public class CustomerManager
+    public class CustomerManager : ManagerBase
     {
-        private static IRepository _repository = RepositoryFactory.GetDefaultInstance();
 
         // dohvaća sve entity kupce
         public static IEnumerable<Kupac> GetAllEntities()

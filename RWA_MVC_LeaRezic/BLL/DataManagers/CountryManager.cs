@@ -7,9 +7,8 @@ using System.Linq;
 
 namespace RWA_MVC_LeaRezic.BLL.DataManagers
 {
-    public class CountryManager
+    public class CountryManager : ManagerBase
     {
-        private static IRepository _repository = RepositoryFactory.GetDefaultInstance();
 
         // DOHVAĆANJE svih entiteta / modela
         public static IEnumerable<Drzava> GetAllEntities()

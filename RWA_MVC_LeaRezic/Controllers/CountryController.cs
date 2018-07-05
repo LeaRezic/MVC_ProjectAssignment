@@ -1,13 +1,16 @@
-﻿using RWA_MVC_LeaRezic.BLL.DataManagers;
+﻿using Microsoft.AspNet.Identity;
+using RWA_MVC_LeaRezic.BLL.DataManagers;
 using RWA_MVC_LeaRezic.DAL.Entities;
 using RWA_MVC_LeaRezic.Models.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
+using System.Web.Security;
 
 namespace RWA_MVC_LeaRezic.Controllers
 {
+
     public class CountryController : Controller
     {
         // GET: Country
@@ -33,9 +36,14 @@ namespace RWA_MVC_LeaRezic.Controllers
         }
 
         // Dodaje novu državu
+        //[Authorize(Roles ="Administrator")]
         public ActionResult AddCountry(CountryVM c)
         {
-            if (ModelState.IsValid)
+            if (!User.IsInRole("Administrator"))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
+            else if (ModelState.IsValid)
             {
                 CountryManager.AddCountry(c);
                 return new HttpStatusCodeResult(HttpStatusCode.OK);
@@ -44,9 +52,14 @@ namespace RWA_MVC_LeaRezic.Controllers
         }
 
         // Dodaje novi grad u državu
+        //[Authorize(Roles = "Administrator")]
         public ActionResult AddCity(CityVM c)
         {
-            if (ModelState.IsValid)
+            if (!User.IsInRole("Administrator"))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
+            else if (ModelState.IsValid)
             {
                 CityManager.AddCity(c);
                 return new HttpStatusCodeResult(HttpStatusCode.OK);

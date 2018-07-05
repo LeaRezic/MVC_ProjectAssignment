@@ -58,7 +58,7 @@
                     <div class="panel-heading">
                         <h3 class="panel-title" id="addCityTitle">Add a new city city to - "Country Name"</h3>
                     </div>
-                    <div class="panel-body">
+                    <div class="panel-body" id="addCityForm">
                         @using (Html.BeginForm(actionName: "AddCity", controllerName: "Country", method: FormMethod.Post, htmlAttributes: new { id = "cityForm" }))
                         {
                             <div class="row">
@@ -95,10 +95,13 @@
                         </div>
                     </div>
                 </div>
-                
+
             </div>
         </div>
         @*gotov dio s gradovima*@
+
+
+
     </div>
 </div>
 
@@ -115,6 +118,18 @@
             //console.log("patka");
             fillCitiesList();
         })
+        
+
+        $('#CreatedCountry_Name').on("blur", function () {
+            setTimeout(function () {
+                $('#CreatedCountry_Name').val("")
+            }, 150);
+        });
+        $('#CreatedCity_Name').on("blur", function () {
+            setTimeout(function () {
+                $('#CreatedCity_Name').val("")
+            }, 150);
+        });
 
         function fillCitiesList() {
             $('#citiesList').empty();
@@ -152,7 +167,7 @@
         $('#countryForm').on('submit', function (e) {
             e.preventDefault();
             if ($(this).valid()) {
-                console.log("Okej je model");
+                //console.log("Okej je model");
                 var submitData = {
                     IDCountry: 0,
                     Name: $('#CreatedCountry_Name').val()
@@ -162,20 +177,19 @@
                     url: '@Url.Action(controllerName:"Country",actionName:"AddCountry")',
                     data: submitData,
                     statusCode: {
+                        403: function () {
+                            toastr.info(`You're not allowed to do this action.<br/>Contact admin if this is a mistake.`);
+                        },
                         200: function () {
                             toastr.success(`${submitData.Name} - successfully added!`);
-                            $('#CreatedCountry_Name').val("");
                             $('#IDCity').focus();
                             refreshDdl();
                         },
                         304: function () {
                             toastr.warning(`Oops! Couldn't add country.<br/>Maybe ${submitData.Name} already exists?`);
-                            //$('#CreatedCountry_Name').val("");
-                            //$('#IDCity').focus();
                         }
                     }
                 })
-                //$('#CreatedCountry_Name').val("").focusout();
             }
             else {
                 console.log("Ne valja neš");
@@ -218,6 +232,9 @@
                         },
                         304: function () {
                             toastr.warning(`Oops! Couldn't add city.<br/>Maybe ${submitData.Name} already exists?`);
+                        },
+                        403: function () {
+                            toastr.info(`You're not allowed to do this action.<br/>Contact admin if this is a mistake.`);
                         }
                     }
                 })

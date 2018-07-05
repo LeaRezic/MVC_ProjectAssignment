@@ -17,6 +17,7 @@ namespace RWA_MVC_LeaRezic.Controllers
             var model = new List<CustomerVM>();
             if (id.HasValue)
             {
+                ViewBag.cityName = CityManager.GetAllEntities().SingleOrDefault(c => c.IDGrad == id).Naziv;
                 model = CustomerManager.GetAllViewModels().Where(c => c.CityID == id).ToList();
             }
             else
@@ -37,6 +38,7 @@ namespace RWA_MVC_LeaRezic.Controllers
 
         // get i post za dodavanje kupca
         [HttpGet]
+        [Authorize(Roles ="Administrator")]
         public ActionResult Create()
         {
             var model = CustomerManager.CreateEmptyViewModel();
@@ -45,6 +47,7 @@ namespace RWA_MVC_LeaRezic.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         public ActionResult Create(CustomerVM customer)
         {
             if (ModelState.IsValid)
@@ -61,6 +64,7 @@ namespace RWA_MVC_LeaRezic.Controllers
 
         // get i post za edit
         [HttpGet]
+        [Authorize(Roles = "Administrator")]
         public ActionResult Edit(int id)
         {
             var model = CustomerManager.Get(id);
@@ -69,6 +73,7 @@ namespace RWA_MVC_LeaRezic.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         public ActionResult Edit(CustomerVM customer)
         {
             if (ModelState.IsValid)
