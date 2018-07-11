@@ -9,7 +9,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAABzZUuQKbZkqhGnlcTZBmtwAAAAACAAAAAAAQZgAAAAEAACAAAADTf7PDuiFwbKICdzpPaZsQRsRPw0td0+wPyWR0xWPP+wAAAAAOgAAAAAIAACAAAADetC0q2mrJL0lleDpYgG2Kug7Y9bRmOasXZCL3wXrxfoAAAAA40bEfSjQWQGUVViJMfWUlYmeBJ4+Qu7VNMSg8BO7LkV1YCK01fR7nRf+dBFCxtxgIaWfOpI2E/tALSmrjbBJfc4GrM6ax2C1y5wJSgTi9QAZ/m35FI0nS8RnDzJXJNrpqzXNHFoD0eOcoo1uYl6k3aF4Ti3cCaL7DFw4IZEZax0AAAAD5bMrnZnYz4z1XFa6kmvC7ez+O6pPIspC5MH0iCq3yXmHI+P3NVX+IGOIy42AWgvqRoqfV+t0+iZpXM9eo5A3v</EncryptedPassword>
   </PropertyGroup>
   <ItemGroup>
-    <AzureDBConnectionStrings Include="Data Source=tcp:rwamvcleadbserver.database.windows.net,1433;Initial Catalog=RWAMVCLeaRezicAppDb;User Id=RwaMvcApp@rwamvcleadbserver;Password=&lt;3rwaNAJ" />
-    <AzureDBConnectionStrings Include="Data Source=tcp:rwamvcleadbserver.database.windows.net,1433;Initial Catalog=RWAMVCLeaRezicAW;User Id=RwaMvcApp@rwamvcleadbserver;Password=&lt;3rwaNAJ" />
+    <AzureDBConnectionStrings Include="Data Source=tcp:rwamvcleadbserver.database.windows.net,1433;Initial Catalog=RWAMVCLeaRezicAppDb;User Id=RwaMvcApp@rwamvcleadbserver;Password=***" />
+    <AzureDBConnectionStrings Include="Data Source=tcp:rwamvcleadbserver.database.windows.net,1433;Initial Catalog=RWAMVCLeaRezicAW;User Id=RwaMvcApp@rwamvcleadbserver;Password=***" />
   </ItemGroup>
 </Project>
