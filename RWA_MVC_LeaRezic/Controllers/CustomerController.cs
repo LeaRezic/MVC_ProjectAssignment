@@ -23,7 +23,7 @@ namespace RWA_MVC_LeaRezic.Controllers
             else
             {
                 //model = CustomerManager.GetAllViewModels().Where(c => c.IDCustomer % 7 == 0).ToList();
-                model = CustomerManager.GetAllViewModels().ToList();
+                return RedirectToAction("BrowseAll", "Country");
             }
             return View(model);
         }

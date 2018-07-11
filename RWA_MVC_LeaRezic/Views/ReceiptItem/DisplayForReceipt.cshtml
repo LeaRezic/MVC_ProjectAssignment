@@ -1,0 +1,29 @@
+﻿@model IEnumerable<RWA_MVC_LeaRezic.Models.ViewModels.ReceiptItemVM>
+@using RWA_MVC_LeaRezic.Extensions
+@using RWA_MVC_LeaRezic.Models.ViewModels
+
+@{
+    ViewBag.Title = "ReceiptItems";
+    var receipt = (ReceiptVM)ViewBag.receipt;
+}
+
+<h2>All items on receipt #@receipt.Code, issue date: @receipt.Date</h2>
+
+@*tu obavezno popravit! Da racun ima bas racun il da racunVM ima id kupca*@
+<p>
+    @Html.ActionLink("<< Back", "ViewByCustomer", "Receipt", new { id = receipt.Id })
+</p>
+
+
+@for (int i = 0; i < Model.Count(); i++)
+{
+    if (i % 2 != 0)
+    {
+        @Html.ReceiptItems(Model.ElementAt(i), true);
+    }
+    else
+    {
+        @Html.ReceiptItems(Model.ElementAt(i));
+    }
+}
+

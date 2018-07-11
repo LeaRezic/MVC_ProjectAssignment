@@ -123,5 +123,20 @@ namespace RWA_MVC_LeaRezic.DAL.DBRepository
                 throw;
             }
         }
+
+        public IEnumerable<Stavka> GetAllReceiptItems()
+        {
+            try
+            {
+                using (var _dbContext = new DBContext())
+                {
+                    return _dbContext.Stavka.Include("Racun").Include("Proizvod").Include("Proizvod.Potkategorija").Include("Proizvod.Potkategorija.Kategorija").ToList();
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }
