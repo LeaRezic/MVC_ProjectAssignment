@@ -20,7 +20,9 @@
                     </div>
                     <div class="panel-body">
                         @* ddl države*@
-                        @Html.DropDownList("IDCountry", selectList: new SelectList(items: ddlOptions, dataTextField: "Naziv", dataValueField: "IDDrzava"), htmlAttributes: new { @class = "form-control" })
+                        @Html.DropDownList("IDCountry",
+                           selectList: new SelectList(items: ddlOptions, dataTextField: "Naziv", dataValueField: "IDDrzava"),
+                           htmlAttributes: new { @class = "form-control" })
                     </div>
                 </div>
                 @* DODAVANJE DRŽAVE *@
@@ -29,7 +31,10 @@
                         <h3 class="panel-title">Add a new country</h3>
                     </div>
                     <div class="panel-body">
-                        @using (Html.BeginForm(actionName: "AddCountry", controllerName: "Country", method: FormMethod.Post, htmlAttributes: new { id = "countryForm" }))
+                        @using (Html.BeginForm(actionName: "AddCountry",
+                                                controllerName: "Country",
+                                                method: FormMethod.Post,
+                                                htmlAttributes: new { id = "countryForm" }))
                         {
                             <div class="row">
                                 <div class="col-xs-8">
@@ -59,7 +64,10 @@
                         <h3 class="panel-title" id="addCityTitle">Add a new city city to - "Country Name"</h3>
                     </div>
                     <div class="panel-body" id="addCityForm">
-                        @using (Html.BeginForm(actionName: "AddCity", controllerName: "Country", method: FormMethod.Post, htmlAttributes: new { id = "cityForm" }))
+                        @using (Html.BeginForm(actionName: "AddCity",
+                                    controllerName: "Country",
+                                    method: FormMethod.Post,
+                                    htmlAttributes: new { id = "cityForm" }))
                         {
                             <div class="row">
                                 <div class="col-xs-8">
@@ -113,8 +121,7 @@
 
         fillCitiesList();
 
-        $('#IDCountry').on("change", function (e) {
-            e.preventDefault();
+        $('#IDCountry').on("change", function () {
             //console.log("patka");
             fillCitiesList();
         })
@@ -151,7 +158,6 @@
                     // u suprotnom ih ispiše u listu
                     else {
                         $(data).each(function (index, city) {
-                        // proučit još, asinkroni ajax + lazy loading entity = kaos, i kak ljepše id u url stavit
                         var href = '@Url.Action(controllerName: "Customer", actionName: "ViewAll")';
                         href += `?id=${city.IDGrad}`;
                         var cityLink = `<a href=${href} class='list-group-item'>${city.Naziv}</a >`;
@@ -167,12 +173,10 @@
         $('#countryForm').on('submit', function (e) {
             e.preventDefault();
             if ($(this).valid()) {
-                //console.log("Okej je model");
                 var submitData = {
                     IDCountry: 0,
                     Name: $('#CreatedCountry_Name').val()
                 }
-                //console.log(submitData.Name);
                 $.ajax({
                     url: '@Url.Action(controllerName:"Country",actionName:"AddCountry")',
                     data: submitData,

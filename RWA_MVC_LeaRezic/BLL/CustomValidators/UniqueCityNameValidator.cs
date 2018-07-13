@@ -14,7 +14,8 @@ namespace RWA_MVC_LeaRezic.BLL.CustomValidators
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             var cityVM = validationContext.ObjectInstance as CityVM;
-            var entity = CityManager.GetAllEntities().SingleOrDefault(c => c.Naziv == cityVM.Name && c.DrzavaID == cityVM.CountryID);
+            var inputName = cityVM.Name.Trim().ToLower();
+            var entity = CityManager.GetAllEntities().SingleOrDefault(c => c.Naziv.ToLower() == inputName && c.DrzavaID == cityVM.CountryID);
 
             // ako ne postoji takav naziv u toj državi, ili ako postoji ali je to on sam - vraća true, u suprotnom validation error
             if (entity == null)

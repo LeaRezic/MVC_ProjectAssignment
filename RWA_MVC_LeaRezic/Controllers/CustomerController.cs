@@ -1,9 +1,6 @@
 ﻿using RWA_MVC_LeaRezic.BLL.DataManagers;
 using RWA_MVC_LeaRezic.Models.ViewModels;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace RWA_MVC_LeaRezic.Controllers
@@ -11,21 +8,19 @@ namespace RWA_MVC_LeaRezic.Controllers
     public class CustomerController : Controller
     {
 
-        // dohvaća sve ak nije specificiran grad, sad je bezveze % 7 == 0 da mi ih vrati manje
         public ActionResult ViewAll(int? id)
         {
-            var model = new List<CustomerVM>();
             if (id.HasValue)
             {
-                ViewBag.cityName = CityManager.GetAllEntities().SingleOrDefault(c => c.IDGrad == id).Naziv;
-                model = CustomerManager.GetAllViewModels().Where(c => c.CityID == id).ToList();
+                if (CityManager.GetAllEntities().ToList().Exists(g => g.IDGrad == id))
+                {
+                    ViewBag.cityName = CityManager.GetAllEntities().SingleOrDefault(c => c.IDGrad == id).Naziv;
+                    ViewBag.cityId = id;
+                    var model = CustomerManager.GetAllViewModels().Where(c => c.CityID == id).ToList();
+                    return View(model);
+                }
             }
-            else
-            {
-                //model = CustomerManager.GetAllViewModels().Where(c => c.IDCustomer % 7 == 0).ToList();
-                return RedirectToAction("BrowseAll", "Country");
-            }
-            return View(model);
+            return RedirectToAction("BrowseAll", "Country");
         }
 
         // dohvaća ime grada po id-u
@@ -38,10 +33,17 @@ namespace RWA_MVC_LeaRezic.Controllers
 
         // get i post za dodavanje kupca
         [HttpGet]
-        [Authorize(Roles ="Administrator")]
-        public ActionResult Create()
+        [Authorize(Roles = "Administrator")]
+        public ActionResult Create(int? id)
         {
             var model = CustomerManager.CreateEmptyViewModel();
+            if (id.HasValue)
+            {
+                if (CityManager.GetAllEntities().ToList().Exists(c=>c.IDGrad == id))
+                {
+                    model.CityID = (int)id;
+                }
+            }
             ViewBag.allCities = CityManager.GetAllEntities().OrderBy(c => c.Naziv);
             return View(model);
         }
@@ -53,11 +55,11 @@ namespace RWA_MVC_LeaRezic.Controllers
             if (ModelState.IsValid)
             {
                 CustomerManager.Add(customer);
-                return RedirectToAction("ViewAll");
+                return RedirectToAction("ViewAll", new { id = customer.CityID });
             }
             else
             {
-                ViewBag.allCities = CityManager.GetAllEntities().OrderBy(c=>c.Naziv);
+                ViewBag.allCities = CityManager.GetAllEntities().OrderBy(c => c.Naziv);
                 return View(customer);
             }
         }

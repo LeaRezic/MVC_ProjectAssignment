@@ -51,7 +51,7 @@ namespace RWA_MVC_LeaRezic.BLL.DataManagers
             return new Drzava
             {
                 IDDrzava = viewModel.IDCountry,
-                Naziv = viewModel.Name
+                Naziv = Utils.GetCleanTitleString(viewModel.Name)
             };
         }
     }

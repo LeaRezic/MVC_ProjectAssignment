@@ -4,6 +4,12 @@
     ViewBag.Title = "Error";
 }
 
-<h1 class="text-danger">Error.</h1>
-<h2 class="text-danger">An error occurred while processing your request.</h2>
+<hgroup>
+    @*<h1 class="text-danger">Error</h1>*@
+    <h1 class="text-info" style="font-size:6em;">(⊙＿⊙')</h1>
+    <h2 class="text-danger">Sorry... This is an extremely pointless error page, but an error indeed occurred while processing your request.</h2>
+</hgroup>
+<hr />
+@Html.ActionLink("<< Back to the Start page", "BrowseAll", "Country", null, null)
+
 

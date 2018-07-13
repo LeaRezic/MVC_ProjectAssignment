@@ -1,12 +1,11 @@
-﻿using Microsoft.AspNet.Identity;
-using RWA_MVC_LeaRezic.BLL.DataManagers;
+﻿using RWA_MVC_LeaRezic.BLL.DataManagers;
 using RWA_MVC_LeaRezic.DAL.Entities;
 using RWA_MVC_LeaRezic.Models.ViewModels;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
-using System.Web.Security;
 
 namespace RWA_MVC_LeaRezic.Controllers
 {

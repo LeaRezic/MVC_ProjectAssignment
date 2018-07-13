@@ -6,6 +6,11 @@
 
 }
 
+@Html.ActionLink(linkText: "<< Back",
+                actionName: "ViewAll",
+                controllerName: "Customer",
+                routeValues: new { id = ViewBag.cityId },
+                htmlAttributes: new { style = "margin-bottom:20px;" })
 
 <h2 class="text-muted" style="margin-bottom:40px;">
     Receipts for customer
@@ -62,8 +67,11 @@
                         @Html.DisplayFor(modelItem => item.TotalPrice)
                     </td>
                     <td>
-                        @Html.ActionLink("Details", "Details", new { id = item.Id },
-                                            new { @class="btn btn-xs btn-link" })
+                        @Html.ActionLink(linkText: "Details",
+                                       actionName: "DisplayForReceipt",
+                                       controllerName: "ReceiptItem",
+                                       routeValues: new { id = item.Id },
+                                       htmlAttributes: new { @class="btn btn-xs btn-link" })
                     </td>
                 </tr>
             }

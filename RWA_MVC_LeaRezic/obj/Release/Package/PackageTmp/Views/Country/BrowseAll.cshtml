@@ -20,7 +20,9 @@
                     </div>
                     <div class="panel-body">
                         @* ddl države*@
-                        @Html.DropDownList("IDCountry", selectList: new SelectList(items: ddlOptions, dataTextField: "Naziv", dataValueField: "IDDrzava"), htmlAttributes: new { @class = "form-control" })
+                        @Html.DropDownList("IDCountry",
+                           selectList: new SelectList(items: ddlOptions, dataTextField: "Naziv", dataValueField: "IDDrzava"),
+                           htmlAttributes: new { @class = "form-control" })
                     </div>
                 </div>
                 @* DODAVANJE DRŽAVE *@
@@ -29,7 +31,10 @@
                         <h3 class="panel-title">Add a new country</h3>
                     </div>
                     <div class="panel-body">
-                        @using (Html.BeginForm(actionName: "AddCountry", controllerName: "Country", method: FormMethod.Post, htmlAttributes: new { id = "countryForm" }))
+                        @using (Html.BeginForm(actionName: "AddCountry",
+                                                controllerName: "Country",
+                                                method: FormMethod.Post,
+                                                htmlAttributes: new { id = "countryForm" }))
                         {
                             <div class="row">
                                 <div class="col-xs-8">
@@ -59,7 +64,10 @@
                         <h3 class="panel-title" id="addCityTitle">Add a new city city to - "Country Name"</h3>
                     </div>
                     <div class="panel-body" id="addCityForm">
-                        @using (Html.BeginForm(actionName: "AddCity", controllerName: "Country", method: FormMethod.Post, htmlAttributes: new { id = "cityForm" }))
+                        @using (Html.BeginForm(actionName: "AddCity",
+                                    controllerName: "Country",
+                                    method: FormMethod.Post,
+                                    htmlAttributes: new { id = "cityForm" }))
                         {
                             <div class="row">
                                 <div class="col-xs-8">

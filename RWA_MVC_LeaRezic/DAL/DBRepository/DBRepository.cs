@@ -65,6 +65,7 @@ namespace RWA_MVC_LeaRezic.DAL.DBRepository
                     return _dbContext.Racun.Include("Komercijalist")
                                             .Include("KreditnaKartica")
                                             .Include(r => r.Stavka)
+                                            .Include("Kupac")
                                             .ToList();
                 }
             }

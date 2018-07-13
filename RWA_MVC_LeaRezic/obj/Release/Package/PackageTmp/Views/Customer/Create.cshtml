@@ -3,19 +3,22 @@
 
 @{
     ViewBag.Title = "Create";
-
     var ddlOptions = ViewBag.allCities as IEnumerable<Grad>;
 }
 
-<h2>Create</h2>
+@Html.ActionLink(linkText: "<< Back",
+                actionName: "ViewAll",
+                controllerName: "Customer",
+                routeValues: new { id = Model.CityID },
+                htmlAttributes: new { style = "margin-bottom:20px;" })
 
+<h2>Add new customer</h2>
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <h4>CustomerVM</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.IDCustomer)

@@ -1,9 +1,4 @@
 ﻿using RWA_MVC_LeaRezic.BLL.DataManagers;
-using RWA_MVC_LeaRezic.Models.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace RWA_MVC_LeaRezic.Controllers
@@ -14,6 +9,7 @@ namespace RWA_MVC_LeaRezic.Controllers
         public ActionResult ViewByCustomer(int id)
         {
             var Model = ReceiptManager.GetAllForCustomer(id);
+            ViewBag.cityId = CustomerManager.Get(id).CityID;
             ViewBag.customerId = id;
             return View(Model);
         }
@@ -21,7 +17,7 @@ namespace RWA_MVC_LeaRezic.Controllers
         [ChildActionOnly]
         public ActionResult GetCustomerName(int id)
         {
-            return Content($"{CustomerManager.Get(id).FirstName} {CustomerManager.Get(id).LastName}");
+            return Content($"{CustomerManager.Get(id).ToString()}");
         }
 
     }

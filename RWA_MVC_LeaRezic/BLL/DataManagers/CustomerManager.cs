@@ -1,6 +1,4 @@
-﻿using RWA_MVC_LeaRezic.DAL.Domain.Repositories;
-using RWA_MVC_LeaRezic.DAL.Entities;
-using RWA_MVC_LeaRezic.DAL.Infrastructure;
+﻿using RWA_MVC_LeaRezic.DAL.Entities;
 using RWA_MVC_LeaRezic.Models.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -29,7 +27,7 @@ namespace RWA_MVC_LeaRezic.BLL.DataManagers
             return new CustomerVM
             {
                 IDCustomer = 0,
-                CityID = _repository.GetAllCities().OrderBy(c => c.IDGrad).FirstOrDefault().IDGrad
+                CityID = _repository.GetAllCities().OrderBy(c => c.Naziv).FirstOrDefault().IDGrad
             };
         }
 
@@ -78,10 +76,10 @@ namespace RWA_MVC_LeaRezic.BLL.DataManagers
             return new Kupac
             {
                 IDKupac = customerVM.IDCustomer,
-                Ime = customerVM.FirstName,
-                Prezime = customerVM.LastName,
-                Email = customerVM.Email,
-                Telefon = customerVM.Telephone,
+                Ime = Utils.GetCleanTitleString(customerVM.FirstName),
+                Prezime = Utils.GetCleanTitleString(customerVM.LastName),
+                Email = customerVM.Email.Trim().ToLower(),
+                Telefon = customerVM.Telephone.Trim().ToLower(),
                 GradID = customerVM.CityID
             };
         }

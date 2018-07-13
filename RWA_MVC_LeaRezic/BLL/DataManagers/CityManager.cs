@@ -54,7 +54,7 @@ namespace RWA_MVC_LeaRezic.BLL.DataManagers
             return new Grad
             {
                 IDGrad = viewModel.IDCity,
-                Naziv = viewModel.Name,
+                Naziv = Utils.GetCleanTitleString(viewModel.Name),
                 DrzavaID = viewModel.CountryID
             };
         }

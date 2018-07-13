@@ -25,5 +25,7 @@ namespace RWA_MVC_LeaRezic.Models.ViewModels
 
         [Display(Name = "City")]
         public int CityID { get; set; }
+
+        public override string ToString() => $"{FirstName} {LastName}";
     }
 }

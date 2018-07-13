@@ -25,5 +25,7 @@ namespace RWA_MVC_LeaRezic.Models.ViewModels
 
         [Display(Name ="Total price")]
         public decimal TotalPrice { get; set; }
+
+        public int CustomerId { get; set; }
     }
 }

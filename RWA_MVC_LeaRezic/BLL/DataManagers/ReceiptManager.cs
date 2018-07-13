@@ -23,16 +23,25 @@ namespace RWA_MVC_LeaRezic.BLL.DataManagers
 
         private static ReceiptVM ConvertEntityToViewModel(Racun entity)
         {
-            return new ReceiptVM
+            ReceiptVM viewModel = new ReceiptVM();
+            viewModel.Id = entity.IDRacun;
+            viewModel.Code = entity.BrojRacuna;
+            viewModel.Date = entity.DatumIzdavanja.ToShortDateString();
+            if (entity.KreditnaKartica != null)
             {
-                Id = entity.IDRacun,
-                Code = entity.BrojRacuna,
-                Date = entity.DatumIzdavanja.ToShortDateString(),
-                CreditCardNumber = entity.KreditnaKartica.Broj,
-                CreditCardType = entity.KreditnaKartica.Tip,
-                ShopAssistant = entity.Komercijalist.Prezime + " " + entity.Komercijalist.Ime,
-                TotalPrice = entity.Stavka.Select(s => s.UkupnaCijena).Sum()
-            };
+                viewModel.CreditCardNumber = Utils.CheckIfNull(entity.KreditnaKartica.Broj);
+                viewModel.CreditCardType = Utils.CheckIfNull(entity.KreditnaKartica.Tip);
+            }
+            if (entity.Komercijalist != null)
+            {
+                viewModel.ShopAssistant = Utils.CheckIfNull(entity.Komercijalist.Prezime)
+                                + " " + Utils.CheckIfNull(entity.Komercijalist.Ime);
+            }
+            viewModel.TotalPrice = entity.Stavka.Select(s => s.UkupnaCijena).Sum();
+            viewModel.CustomerId = entity.Kupac.IDKupac;
+            return viewModel;
         }
+
+
     }
 }

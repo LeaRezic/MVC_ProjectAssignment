@@ -5,18 +5,23 @@
 @{
     ViewBag.Title = "ReceiptItems";
     var receipt = (ReceiptVM)ViewBag.receipt;
+    var customer = Html.Action("GetCustomerName", "Receipt", new { id = receipt.CustomerId });
 }
 
-<h2>All items on receipt #@receipt.Code, issue date: @receipt.Date</h2>
+@Html.ActionLink(linkText: "<< Back",
+                    actionName:"ViewByCustomer",
+                    controllerName:"Receipt",
+                    routeValues: new { id = receipt.CustomerId },
+                    htmlAttributes: new { style = "margin-bottom:20px;" })
 
-@*tu obavezno popravit! Da racun ima bas racun il da racunVM ima id kupca*@
-<p>
-    @Html.ActionLink("<< Back", "ViewByCustomer", "Receipt", new { id = receipt.Id })
-</p>
-
+<h2 class="text-muted" style="margin-bottom:20px;">All items on receipt #@receipt.Code, issue date: @receipt.Date, customer: @customer</h2>
 
 @for (int i = 0; i < Model.Count(); i++)
 {
+    if (i % 4 == 0)
+    {
+        @:<div class="row">
+    }
     if (i % 2 != 0)
     {
         @Html.ReceiptItems(Model.ElementAt(i), true);
@@ -24,6 +29,10 @@
     else
     {
         @Html.ReceiptItems(Model.ElementAt(i));
+    }
+    if (((i - 3) % 4 == 0) || i == Model.Count() - 1)
+    {
+        @:</div>
     }
 }
 

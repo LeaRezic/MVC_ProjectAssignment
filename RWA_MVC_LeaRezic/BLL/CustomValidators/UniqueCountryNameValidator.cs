@@ -11,7 +11,8 @@ namespace RWA_MVC_LeaRezic.BLL.CustomValidators
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             var countryVM = validationContext.ObjectInstance as CountryVM;
-            var entity = CountryManager.GetAllEntities().SingleOrDefault(c => c.Naziv == countryVM.Name);
+            var inputName = countryVM.Name.Trim().ToLower();
+            var entity = CountryManager.GetAllEntities().FirstOrDefault(c => c.Naziv.ToLower() == inputName);
 
             // ako ne postoji takav email, ili ako postoji ali je to on sam - vraća true, u suprotnom validation error
             if (entity == null)

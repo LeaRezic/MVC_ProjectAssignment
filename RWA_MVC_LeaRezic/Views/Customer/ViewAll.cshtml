@@ -1,12 +1,21 @@
 ﻿@model IEnumerable<RWA_MVC_LeaRezic.Models.ViewModels.CustomerVM>
 
 @{
-    ViewBag.Title = "ViewAll";
+    ViewBag.Title = "Customers";
     var editButtonClass = User.IsInRole("Administrator") ? "btn btn-xs btn-link" : "hidden";
+    var cityName = Html.Action("GetCityName", new { id = @ViewBag.cityId });
 }
 
+@Html.ActionLink(linkText: "<< Back",
+                actionName: "BrowseAll",
+                controllerName: "Country",
+                routeValues: null,
+                htmlAttributes: new { style = "margin-bottom:20px;" })
+
 <div style="margin-bottom:20px;">
-    <h2 class="text-muted" style="display:inline-block">Customers in @ViewBag.cityName</h2>
+    <h2 class="text-muted">
+        Customers in @cityName
+    </h2>
 </div>
 
 @if (Model.Count() != 0)
@@ -58,8 +67,11 @@
                         @Html.Action("GetCityName", new { id = item.CityID })
                     </td>
                     <td>
-                        @Html.ActionLink(linkText: "Receipts", actionName: "ViewByCustomer", controllerName: "Receipt", routeValues: new { id = item.IDCustomer },
-                          htmlAttributes: new { @class = "btn btn-info btn-xs" })
+                        @Html.ActionLink(linkText: "Receipts",
+                                       actionName: "ViewByCustomer",
+                                       controllerName: "Receipt",
+                                       routeValues: new { id = item.IDCustomer },
+                                       htmlAttributes: new { @class = "btn btn-info btn-xs" })
                     </td>
                     @if (User.IsInRole("Administrator"))
                     {
@@ -79,7 +91,10 @@ else
 
 
 
-@Html.ActionLink("Add New Customer", "Create", null, new { @class = "btn btn-primary" })
+@if (User.IsInRole("Administrator"))
+{
+    @Html.ActionLink("Add New Customer", "Create", new { id = ViewBag.cityId }, new { @class = "btn btn-primary" })
+}
 
 @section Scripts {
 
@@ -92,7 +107,7 @@ else
 
         @if (Model.Count() == 0)
         {
-            @:toastr.info("No customers in @ViewBag.cityName");
+            @:toastr.info("No customers in @cityName");
         }
 
         // ovo bu bio ajax, zasad samo klijentski - ružno i sporo :D

@@ -12,6 +12,7 @@ namespace RWA_MVC_LeaRezic.BLL.DataManagers
             return _repository.GetAllReceiptItems()
                                 .Where(i => i.Racun.IDRacun == id)
                                 .Select(i => ConvertEntityToViewModel(i))
+                                .OrderByDescending(i => i.TotalPrice)
                                 .ToList();
         }
 
@@ -23,10 +24,10 @@ namespace RWA_MVC_LeaRezic.BLL.DataManagers
                 Color = GetStringOrNotDefined(entity.Proizvod.Boja),
                 Subcategory = GetStringOrNotDefined(entity.Proizvod.Potkategorija.Naziv),
                 Category = GetStringOrNotDefined(entity.Proizvod.Potkategorija.Kategorija.Naziv),
-                Price = decimal.Round(entity.CijenaPoKomadu,2),
+                Price = decimal.Round(entity.CijenaPoKomadu, 2),
                 Amount = entity.Kolicina,
-                DiscountPercentage = decimal.Round(entity.PopustUPostocima,2),
-                TotalPrice = decimal.Round(entity.UkupnaCijena,2)
+                DiscountPercentage = decimal.Round(entity.PopustUPostocima, 2),
+                TotalPrice = decimal.Round(entity.UkupnaCijena, 2)
             };
         }
 

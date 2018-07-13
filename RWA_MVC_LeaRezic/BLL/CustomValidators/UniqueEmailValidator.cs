@@ -10,21 +10,23 @@ namespace RWA_MVC_LeaRezic.BLL.CustomValidators
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             var customerVM = validationContext.ObjectInstance as CustomerVM;
-            var entity = CustomerManager.GetAllEntities().FirstOrDefault(c => c.Email == customerVM.Email);
+            var inputEmail = customerVM.Email.Trim().ToLower();
+
+            bool exists = CustomerManager.GetAllEntities()
+                                        .Select(k => Utils.GetCleanOrDummyString(k.Email))
+                                        .ToList()
+                                        .Exists(e => e == inputEmail);
 
             // ako ne postoji takav email, ili ako postoji ali je to on sam - vraća true, u suprotnom validation error
-            if (entity == null)
+            if (exists)
             {
-                return ValidationResult.Success;
+                var entity = CustomerManager.GetAllEntities().FirstOrDefault(c => Utils.GetCleanOrDummyString(c.Email) == inputEmail);
+                if (entity.IDKupac != customerVM.IDCustomer)
+                {
+                    return new ValidationResult("Sorry, e-mail already exists!");
+                }
             }
-            else if (entity.IDKupac == customerVM.IDCustomer)
-            {
-                return ValidationResult.Success;
-            }
-            else
-            {
-                return new ValidationResult("Sorry, e-mail already exists!");
-            }
+            return ValidationResult.Success;
         }
     }
 }
